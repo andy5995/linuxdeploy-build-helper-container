@@ -3,26 +3,29 @@ name: Test Action
 on:
   push:
     branches: trunk
+    paths:
+    - 'action.yml'
+    - '**test.yml'
   pull_request:
     branches: trunk
+    paths:
+    - 'action.yml'
+    - '**test.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform: [amd64, arm64]
-    env:
-      APPDIR: '${{ github.workspace }}/AppDir'
+        platform: [amd64,arm64]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Use action from self
-        id: linuxdeploy
-        uses: ./
+        uses: andy5995/linuxdeploy-build-helper@${{ github.ref }}
         with:
           platform: ${{ matrix.platform }}
-          install_commands: |
+          dependency_commands: |
             sudo apt install -y libncursesw5-dev
           build_commands: |
             export -p
@@ -31,18 +34,24 @@ jobs:
             meson setup _build -Dprefix=/usr
             cd _build
             ninja
+          install_to_appdir_commands: |
             meson install --destdir=$APPDIR --skip-subprojects
+          linuxdeploy_output_version: 0.9.1
           linuxdeploy_args: |
             -d rmw/packaging/rmw.desktop \
             --icon-file=rmw/packaging/rmw_icon_32x32.png \
             --icon-filename=rmw \
             --executable=$APPDIR/usr/bin/rmw \
-            --appdir=$APPDIR \
             -o appimage
+
+      - name: Create sha256sum
+        run: |
+          cd out
+          sha256sum $IMAGE_FILENAME > $IMAGE_FILENAME.sha256sum
 
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
-          name: rmw_appimage_${{ matrix.platform }}
+          name: ${{ env.IMAGE_FILENAME }}
           path: ./out/*
           if-no-files-found: error
