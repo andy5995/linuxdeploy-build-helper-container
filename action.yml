@@ -1,0 +1,55 @@
+name: 'LinuxDeploy Action'
+inputs:
+  platform:
+    description: 'Target platform for LinuxDeploy'
+    required: true
+    default: 'linux/amd64'
+  install_commands:
+    description: 'Commands to install dependencies'
+    required: false
+    default: ''
+  build_commands:
+    description: 'Commands to build the project'
+    required: false
+    default: ''
+  linuxdeploy_args:
+    description: 'Argument string to pass to linuxdeploy'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Run LinuxDeploy
+      id: linuxdeploy
+      shell: bash
+      run: |
+        export -p
+        case ${{ inputs.platform }} in
+          'amd64')
+            ;;
+          'arm64')
+            ;;
+          *)
+            echo "Unsupported platform: ${{ inputs.platform }}"
+            exit 1
+            ;;
+        esac
+        export HOSTUID=$(id -u)
+        docker run \
+          -e HOSTUID -e APPDIR=$APPDIR --rm -v $(pwd):/workspace -w /workspace \
+          --platform linux/${{ inputs.platform }} -u root andy5995/linuxdeploy:latest /bin/sh -c \
+          "usermod -u $HOSTUID builder && su builder -c 'export -p' && \
+          set -e && \
+          if [ -n '${{ inputs.install_commands }}' ]; then \
+            eval '${{ inputs.install_commands }}'; \
+          fi && \
+          if [ -n '${{ inputs.build_commands }}' ]; then \
+            eval '${{ inputs.build_commands }}'; \
+          fi && \
+          cd /workspace
+          linuxdeploy ${{ inputs.linuxdeploy_args }}
+          mkdir /workspace/out
+          mv *AppImage* out"
