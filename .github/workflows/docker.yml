@@ -41,5 +41,3 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: andy5995/linuxdeploy:latest
-          cache-from: type=registry,ref=andy5995/linuxdeploy:buildcache
-          cache-to: type=registry,ref=andy5995/linuxdeploy:buildcache,mode=max
