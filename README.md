@@ -1,4 +1,4 @@
-# linuxdeplay-build-helper
+# linuxdeploy-build-helper
 
 An action that aims to help build an
 [AppImage](https://github.com/AppImage/AppImageKit) using
