@@ -12,6 +12,9 @@ on:
     - 'action.yml'
     - '**test.yml'
 
+env:
+  VERSION: action-test
+
 jobs:
   test-rmw:
     runs-on: ubuntu-latest
@@ -35,7 +38,7 @@ jobs:
             ninja
           install_to_appdir_commands: |
             meson install --destdir=$APPDIR --skip-subprojects
-          linuxdeploy_output_version: 0.9.1
+          linuxdeploy_output_version: $VERSION
           linuxdeploy_args: |
             -d rmw/packaging/rmw.desktop \
             --icon-file=rmw/packaging/rmw_icon_32x32.png \
@@ -83,7 +86,7 @@ jobs:
             ninja
           install_to_appdir_commands: |
             meson install --destdir=$APPDIR --skip-subprojects
-          linuxdeploy_output_version: 0.9.1
+          linuxdeploy_output_version: $VERSION
           linuxdeploy_args: |
             -d netpanzer/support/win32/netpanzer.desktop \
             --custom-apprun=netpanzer/support/appimage/AppRun \
