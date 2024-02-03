@@ -13,7 +13,7 @@ on:
     - '**test.yml'
 
 jobs:
-  build:
+  test-rmw:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,7 +28,6 @@ jobs:
           dependency_commands: |
             sudo apt install -y libncursesw5-dev
           build_commands: |
-            export -p
             git clone --depth 1 https://github.com/theimpossibleastronaut/rmw
             cd rmw
             meson setup _build -Dprefix=/usr
@@ -43,6 +42,55 @@ jobs:
             --icon-filename=rmw \
             --executable=$APPDIR/usr/bin/rmw \
             -o appimage
+
+      - name: Create sha256sum
+        run: |
+          cd out
+          sha256sum $IMAGE_FILENAME > $IMAGE_FILENAME.sha256sum
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.IMAGE_FILENAME }}
+          path: ./out/*
+          if-no-files-found: error
+
+  test-netpanzer:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [amd64]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use action from self
+        uses: ./
+        with:
+          platform: ${{ matrix.platform }}
+          dependency_commands: |
+            sudo apt install -y \
+              gettext \
+              liblua5.1-0-dev \
+              libphysfs-dev \
+              libsdl2-dev \
+              libsdl2-mixer-dev \
+              libsdl2-ttf-dev
+          build_commands: |
+            git clone --depth 1 https://github.com/netpanzer/netpanzer
+            cd netpanzer
+            meson setup _build -Dprefix=/usr
+            cd _build
+            ninja
+          install_to_appdir_commands: |
+            meson install --destdir=$APPDIR --skip-subprojects
+          linuxdeploy_output_version: 0.9.1
+          linuxdeploy_args: |
+            -d netpanzer/support/win32/netpanzer.desktop \
+            --custom-apprun=netpanzer/support/appimage/AppRun \
+            --icon-file=netpanzer/netpanzer.png \
+            --icon-filename=netpanzer \
+            --executable $APPDIR/usr/bin/netpanzer \
+            --output appimage
 
       - name: Create sha256sum
         run: |

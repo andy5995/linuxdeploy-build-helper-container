@@ -92,8 +92,13 @@ Currently supported platforms:
 
 The value of these variables are set in the action:
 
+    ACTION_WORKSPACE
     APPDIR
     IMAGE_FILENAME (after the AppImage has been created)
+
+Use '$ACTION_WORKSPACE' if you need to specify an absolute path.
+GITHUB_WORKSPACE won't work in most sections because the commands are run
+inside a docker container as an unprivileged user.
 
 The arm64 builds are done using
 [qemu](https://github.com/docker/setup-qemu-action) and will take much longer
