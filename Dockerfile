@@ -5,7 +5,6 @@ RUN \
     autoconf \
     automake \
     build-essential \
-    cmake \
     curl \
     desktop-file-utils \
     fuse \
@@ -27,6 +26,7 @@ RUN \
     wget \
     xxd
 
+RUN python3 -m pip install cmake
 RUN python3 -m pip install meson ninja
 
 RUN \
