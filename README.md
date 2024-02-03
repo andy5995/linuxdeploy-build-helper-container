@@ -90,6 +90,8 @@ Currently supported platforms:
 ```
 ## Notes
 
+The AppImage will be placed in `./` (relative to your GitHub workspace).
+
 The value of these variables are set in the action:
 
     ACTION_WORKSPACE
