@@ -25,8 +25,9 @@ RUN \
     python3-pip \
     sudo \
     wget \
-    xxd && \
-  python3 -m pip install meson ninja
+    xxd
+
+RUN python3 -m pip install meson ninja
 
 RUN \
   git clone --depth 1 --branch 1-alpha-20240109-1 https://github.com/linuxdeploy/linuxdeploy --recurse-submodules && \
@@ -43,6 +44,7 @@ RUN \
     cd AppImageKit && \
     cmake . && make -j $(nproc) && make install && cd .. && \
     rm -rf AppImageKit
+RUN wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/blob/master/linuxdeploy-plugin-gtk.sh
 
 RUN useradd -m builder && passwd -d builder
 RUN echo "builder ALL=(ALL) ALL" >> /etc/sudoers
