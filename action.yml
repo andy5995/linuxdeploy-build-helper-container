@@ -1,0 +1,78 @@
+name: 'LinuxDeploy Action'
+inputs:
+  platform:
+    description: 'Target platform for LinuxDeploy'
+    required: true
+    default: 'amd64'
+  dependency_commands:
+    description: 'Commands to install dependencies'
+    required: false
+    default: ''
+  build_commands:
+    description: 'Commands to build the project'
+    required: true
+    default: ''
+  install_to_appdir_commands:
+    description: 'Commands to install and copy files to the destination AppDir'
+    required: true
+    default: ''
+  linuxdeploy_output_version:
+    description: 'Version string used by linuxdeploy used for the image filename'
+    required: true
+    default: ''
+  linuxdeploy_args:
+    description: 'Argument string to pass to linuxdeploy'
+    required: true
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - if: ${{ inputs.platform != 'amd64' }}
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set APPDIR
+      shell: bash
+      run: echo "APPDIR=/home/builder/AppDir" >> $GITHUB_ENV
+
+    - name: Run LinuxDeploy
+      id: linuxdeploy
+      shell: bash
+      run: |
+        export -p
+        case ${{ inputs.platform }} in
+          'amd64')
+            ;;
+          'arm64')
+            ;;
+          *)
+            echo "Unsupported platform: ${{ inputs.platform }}"
+            exit 1
+            ;;
+        esac
+        export HOSTUID=$(id -u)
+        docker run \
+          -e HOSTUID -e APPDIR=$APPDIR --rm -v $(pwd):/workspace -w /workspace \
+          --platform linux/${{ inputs.platform }} -u root andy5995/linuxdeploy:latest \
+          /bin/sh -c "usermod -u $HOSTUID builder && su builder -c 'export -p && \
+          set -e && \
+          if [ -n \"${{ inputs.dependency_commands }}\" ]; then \
+            eval \"${{ inputs.dependency_commands }}\"; \
+          fi && \
+          if [ -n \"${{ inputs.build_commands }}\" ]; then \
+            eval \"${{ inputs.build_commands }}\"; \
+          fi && \
+          if [ -n \"${{ inputs.install_to_appdir_commands }}\" ]; then \
+            eval \"${{ inputs.install_to_appdir_commands }}\"; \
+          fi && \
+          cd /workspace && \
+          export LINUXDEPLOY_OUTPUT_VERSION=${{ inputs.linuxdeploy_output_version }} && \
+          linuxdeploy --appdir=$APPDIR ${{ inputs.linuxdeploy_args }}
+          mkdir out && \
+          mv *AppImage out'"
+
+    - name: Set filename
+      shell: bash
+      run: |
+        echo "IMAGE_FILENAME=$(basename `find out/*.AppImage`)" >> $GITHUB_ENV
+
