@@ -1,4 +1,5 @@
 name: 'LinuxDeploy Action'
+description: 'An action that aims to help build an AppImage using linuxdeploy'
 
 inputs:
   platform:
@@ -81,3 +82,6 @@ runs:
       run: |
         echo "IMAGE_FILENAME=$(basename `find out/*.AppImage`)" >> $GITHUB_ENV
 
+branding:
+  icon: package
+  color: gray-dark
