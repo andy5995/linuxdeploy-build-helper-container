@@ -90,10 +90,17 @@ Currently supported platforms:
 ```
 ## Notes
 
+The AppImage will be placed in `./` (relative to your GitHub workspace).
+
 The value of these variables are set in the action:
 
+    ACTION_WORKSPACE
     APPDIR
     IMAGE_FILENAME (after the AppImage has been created)
+
+Use '$ACTION_WORKSPACE' if you need to specify an absolute path.
+GITHUB_WORKSPACE won't work in most sections because the commands are run
+inside a docker container as an unprivileged user.
 
 The arm64 builds are done using
 [qemu](https://github.com/docker/setup-qemu-action) and will take much longer
@@ -102,8 +109,8 @@ longer than the timeout setting, then the job will exit before the image is
 created.
 
 If you have access to a native arm64 system, you can use the docker image from
-this action, which is `andy5995/linuxdeploy:latest` or use a release from the
-linuxdeploy repository (link above).
+this action, which is `andy5995/linuxdeploy:latest` or use a linuxdeploy
+release from their repository (link above).
 
 ## Contributing
 

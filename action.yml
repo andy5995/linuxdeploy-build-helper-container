@@ -36,6 +36,10 @@ runs:
       shell: bash
       run: echo "APPDIR=/home/builder/AppDir" >> $GITHUB_ENV
 
+    - name: Set ACTION_WORKSPACE
+      shell: bash
+      run: echo "ACTION_WORKSPACE=/workspace" >> $GITHUB_ENV
+
     - name: Run LinuxDeploy
       id: linuxdeploy
       shell: bash
@@ -53,7 +57,7 @@ runs:
         esac
         export HOSTUID=$(id -u)
         docker run \
-          -e HOSTUID -e APPDIR=$APPDIR --rm -v $(pwd):/workspace -w /workspace \
+          -e HOSTUID -e APPDIR=$APPDIR --rm -v $(pwd):$ACTION_WORKSPACE -w $ACTION_WORKSPACE \
           --platform linux/${{ inputs.platform }} -u root andy5995/linuxdeploy:latest \
           /bin/sh -c "usermod -u $HOSTUID builder && su builder -c 'export -p && \
           set -e && \
@@ -66,8 +70,8 @@ runs:
           if [ -n \"${{ inputs.install_to_appdir_commands }}\" ]; then \
             eval \"${{ inputs.install_to_appdir_commands }}\"; \
           fi && \
-          cd /workspace && \
           export LINUXDEPLOY_OUTPUT_VERSION=${{ inputs.linuxdeploy_output_version }} && \
+          cd $ACTION_WORKSPACE && \
           linuxdeploy --appdir=$APPDIR ${{ inputs.linuxdeploy_args }}
           mkdir out && \
           mv *AppImage out'"
