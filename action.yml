@@ -1,4 +1,5 @@
 name: 'LinuxDeploy Action'
+
 inputs:
   platform:
     description: 'Target platform for LinuxDeploy'
