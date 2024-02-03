@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Use action from self
-        uses: andy5995/linuxdeploy-build-helper@${{ github.ref }}
+        uses: ./
         with:
           platform: ${{ matrix.platform }}
           dependency_commands: |
