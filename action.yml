@@ -33,13 +33,13 @@ runs:
     - if: ${{ inputs.platform != 'amd64' }}
       uses: docker/setup-qemu-action@v3
 
-    - name: Set APPDIR
-      shell: bash
-      run: echo "APPDIR=/home/builder/AppDir" >> $GITHUB_ENV
-
     - name: Set ACTION_WORKSPACE
       shell: bash
       run: echo "ACTION_WORKSPACE=/workspace" >> $GITHUB_ENV
+
+    - name: Set APPDIR
+      shell: bash
+      run: echo "APPDIR=$ACTION_WORKSPACE/AppDir" >> $GITHUB_ENV
 
     - name: Run LinuxDeploy
       id: linuxdeploy
@@ -58,7 +58,8 @@ runs:
         esac
         export HOSTUID=$(id -u)
         docker run \
-          -e HOSTUID -e APPDIR=$APPDIR --rm -v $(pwd):$ACTION_WORKSPACE -w $ACTION_WORKSPACE \
+          -e HOSTUID -e APPDIR=$APPDIR -e ACTION_WORKSPACE \
+          --rm -v $(pwd):$ACTION_WORKSPACE -w $ACTION_WORKSPACE \
           --platform linux/${{ inputs.platform }} -u root andy5995/linuxdeploy:latest \
           /bin/sh -c "usermod -u $HOSTUID builder && su builder -c 'export -p && \
           set -e && \
