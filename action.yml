@@ -1,4 +1,4 @@
-name: 'LinuxDeploy Action'
+name: 'linuxdeploy Build Helper'
 description: 'An action that aims to help build an AppImage using linuxdeploy'
 
 inputs:
