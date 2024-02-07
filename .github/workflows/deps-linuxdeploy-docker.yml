@@ -16,13 +16,18 @@ on:
 jobs:
   build-dependencies-image:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: ["linux/amd64", "linux/arm64", "linux/arm/v7"]
+      fail-fast: false
     steps:
       -
         name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: true
-      -
+
+      - if: ${{ matrix.platform != 'linux/amd64' }}
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       -
@@ -48,5 +53,6 @@ jobs:
         with:
           context: .
           file: ./dependencies.dockerfile
+          platforms: ${{ matrix.platform }}
           push: true
           tags: andy5995/linuxdeploy:dependencies-latest
