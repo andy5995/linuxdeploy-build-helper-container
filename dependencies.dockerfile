@@ -51,9 +51,16 @@ RUN \
 
 RUN useradd -m builder && passwd -d builder
 RUN echo "builder ALL=(ALL) ALL" >> /etc/sudoers
+WORKDIR /home/builder
+
+# This would get downloaded during the linuxdeploy cmake config,
+# but we'll do it here to potentially help things along
+RUN \
+  git clone --depth=1 --branch v.3.3.3 https://github.com/GreycLab/CImg && \
+  mv CImg/CImg.h /usr/include && \
+  rm -rf CImg
 
 USER builder
-WORKDIR /home/builder
 
 ARG CMAKE_VER=3.28.3
 RUN \
@@ -75,10 +82,4 @@ RUN python3 -m pip install pip --upgrade --user
 # On arm/v7, pip can't install cmake from source, which is needed to build ninja
 RUN python3 -m pip install meson ninja --upgrade --user
 
-# This would get downloaded during the linuxdeploy cmake config,
-# but we'll do it here to potentially help things along
 USER root
-RUN \
-  git clone --depth=1 --branch v.3.3.3 https://github.com/GreycLab/CImg && \
-  mv CImg/CImg.h /usr/include && \
-  rm -rf CImg
