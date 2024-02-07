@@ -39,14 +39,6 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          append: |
-            - endpoint: ${{ env.DOCKER_HOST }}
-              platforms: linux/amd64
-            - endpoint: ${{ env.DOCKER_HOST }}
-              platforms: linux/arm64
-            - endpoint: ${{ env.DOCKER_HOST }}
-              platforms: linux/arm/v7
       -
         name: Build and push
         uses: docker/build-push-action@v5
