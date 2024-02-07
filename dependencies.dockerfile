@@ -27,7 +27,8 @@ RUN \
     sudo \
     wget \
     xxd && \
-  update-ca-certificates -f
+    apt install -y --reinstall ca-certificates && \
+    update-ca-certificates -f
 
 # Cmake dependencies
 RUN \
@@ -78,6 +79,6 @@ RUN python3 -m pip install meson ninja --upgrade --user
 # but we'll do it here to potentially help things along
 USER root
 RUN \
-  wget https://codeload.github.com/GreycLab/CImg/tar.gz/refs/tags/v.3.3.3 && \
-  tar xvf v.3.3.3 -x CImg-v.3.3.3/CImg.h && \
-  mv CImg-v.3.3.3/CImg.h /usr/include && rm -rf *v.3.3.3*
+  git clone --depth=1 --branch v.3.3.3 https://github.com/GreycLab/CImg && \
+  mv CImg/CImg.h /usr/include && \
+  rm -rf CImg
