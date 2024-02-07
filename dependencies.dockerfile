@@ -53,10 +53,8 @@ RUN echo "builder ALL=(ALL) ALL" >> /etc/sudoers
 
 USER builder
 WORKDIR /home/builder
-# So pip will not report about the path...
 
 ARG CMAKE_VER=3.28.3
-
 RUN \
   curl -LO https://github.com/Kitware/CMake/releases/download/v$CMAKE_VER/cmake-$CMAKE_VER.tar.gz && \
   tar xvf cmake-$CMAKE_VER.tar.gz && \
@@ -67,8 +65,9 @@ RUN \
     --no-system-cppdap \
     --parallel=$(nproc) && \
   make -j $(nproc) && make install && \
-  cd .. && rm -rf cmake-$CMAKE-VER
+  cd .. && rm -rf cmake-"$CMAKE_VER"*
 
+# So pip will not report about the path...
 ENV PATH=/home/builder/.local/bin:$PATH
 RUN python3 -m pip install pip --upgrade --user
 
@@ -81,4 +80,4 @@ USER root
 RUN \
   wget https://codeload.github.com/GreycLab/CImg/tar.gz/refs/tags/v.3.3.3 && \
   tar xvf v.3.3.3 -x CImg-v.3.3.3/CImg.h && \
-  mv CImg-v.3.3.3/CImg.h /usr/include && rm -rf v.3.3*
+  mv CImg-v.3.3.3/CImg.h /usr/include && rm -rf *v.3.3.3*
