@@ -36,7 +36,12 @@ jobs:
         uses: docker/setup-buildx-action@v3
         with:
           append: |
-            - platforms: linux/amd64,linux/arm64,linux/arm/v7
+            - endpoint: unix:///var/run/docker1.sock
+              platforms: linux/amd64
+            - endpoint: unix:///var/run/docker2.sock
+              platforms: linux/arm64
+            - endpoint: unix:///var/run/docker3.sock
+              platforms: linux/arm/v7
       -
         name: Build and push
         uses: docker/build-push-action@v5
