@@ -82,7 +82,7 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     needs:
-      - build-dependencies-image
+      - build
     steps:
       -
         name: Download digests
