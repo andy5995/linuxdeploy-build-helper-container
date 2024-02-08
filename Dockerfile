@@ -5,6 +5,8 @@ WORKDIR /home/builder
 RUN \
   git clone --depth 1 --branch 1-alpha-20240109-1 https://github.com/linuxdeploy/linuxdeploy --recurse-submodules && \
     cd linuxdeploy && cp src/core/copyright/copyright.h src/core && \
+    # On arm/v7, wget fails if --no-check-certificate isn't used
+    sed -i 's/wget --quiet \"$url\" -O -/curl -o - \"$url\"/g' src/core/generate-excludelist.sh && \
     cmake . \
       -G Ninja \
       -DCMAKE_INSTALL_PREFIX=$HOME/.local \
@@ -27,7 +29,7 @@ RUN \
     -DBUILD_TESTING=OFF && \
   make -j $(nproc) && make install && \
   cd .. && rm -rf AppImageKit
-RUN wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/blob/master/linuxdeploy-plugin-gtk.sh
+RUN curl -LO https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/blob/master/linuxdeploy-plugin-gtk.sh
 
 USER root
 ARG DEBIAN_FRONTEND=noninteractive
