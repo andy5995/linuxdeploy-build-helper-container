@@ -41,7 +41,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY_IMAGE }}
-          tags: type=raw,value=dependencies-latest
 
       - if: ${{ matrix.platform != 'linux/amd64' }}
         name: Set up QEMU
@@ -65,7 +64,6 @@ jobs:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
-          tags: ${{ steps.meta.outputs.tags }}
       -
         name: Export digest
         run: |
