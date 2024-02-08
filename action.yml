@@ -45,11 +45,12 @@ runs:
       id: linuxdeploy
       shell: bash
       run: |
-        export -p
         case ${{ inputs.platform }} in
           'amd64')
             ;;
           'arm64')
+            ;;
+          'arm/v7')
             ;;
           *)
             echo "Unsupported platform: ${{ inputs.platform }}"
@@ -58,11 +59,12 @@ runs:
         esac
         export HOSTUID=$(id -u)
         docker run \
-          -e HOSTUID -e APPDIR=$APPDIR -e ACTION_WORKSPACE \
-          --rm -v $(pwd):$ACTION_WORKSPACE -w $ACTION_WORKSPACE \
+          -e HOSTUID -e APPDIR -e ACTION_WORKSPACE \
+          --rm -v $(pwd):$ACTION_WORKSPACE \
           --platform linux/${{ inputs.platform }} -u root andy5995/linuxdeploy:latest \
-          /bin/sh -c "usermod -u $HOSTUID builder && su builder -c 'export -p && \
+          /bin/bash -c "usermod -u $HOSTUID builder && su builder -l -c 'export -p && \
           set -e && \
+          cd $ACTION_WORKSPACE && \
           if [ -n \"${{ inputs.dependency_commands }}\" ]; then \
             eval \"${{ inputs.dependency_commands }}\"; \
           fi && \

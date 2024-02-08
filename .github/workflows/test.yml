@@ -4,6 +4,7 @@ concurrency:
   cancel-in-progress: true
 
 on:
+  workflow_dispatch:
   push:
     branches: trunk
     paths:
@@ -23,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform: [amd64,arm64]
+        platform: ['amd64', 'arm64', 'arm/v7']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,6 +33,7 @@ jobs:
         with:
           platform: ${{ matrix.platform }}
           dependency_commands: |
+            export -p
             sudo apt install -y libncursesw5-dev
           build_commands: |
             git clone --depth 1 https://github.com/theimpossibleastronaut/rmw
