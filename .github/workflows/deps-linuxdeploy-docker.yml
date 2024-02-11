@@ -22,7 +22,12 @@ jobs:
     name: ${{ matrix.platform }}-dep-image
     strategy:
       matrix:
-        platform: ['linux/amd64', 'linux/arm64', 'linux/arm/v7']
+        platform:
+          - linux/amd64
+          - linux/arm64
+          - linux/arm/v7
+          - linux/ppc64le
+          - linux/s390x
       fail-fast: true
     steps:
       -

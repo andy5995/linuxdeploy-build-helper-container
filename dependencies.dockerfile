@@ -27,7 +27,6 @@ RUN \
     sudo \
     wget \
     xxd && \
-    apt install -y --reinstall ca-certificates && \
     update-ca-certificates -f
 
 # Cmake dependencies
