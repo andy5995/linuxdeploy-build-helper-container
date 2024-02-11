@@ -29,7 +29,12 @@ RUN \
     -DBUILD_TESTING=OFF && \
   make -j $(nproc) && make install && \
   cd .. && rm -rf AppImageKit
-RUN curl -LO https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/blob/master/linuxdeploy-plugin-gtk.sh
+
+WORKDIR /home/builder/.local/bin
+RUN \
+  curl -LO https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/raw/97290a3e374381e9fa7983ba098729a37076f3ed/linuxdeploy-plugin-gtk.sh && \
+  chmod +x linuxdeploy-plugin-gtk.sh
+
 
 USER root
 ARG DEBIAN_FRONTEND=noninteractive
@@ -37,11 +42,31 @@ RUN \
   apt update && apt upgrade -y && apt install -y \
     libgtk2.0-dev \
     libgtk-3-dev \
+    nlohmann-json3-dev \
     qt5-default
-
-ENV DOCKER_BUILD=TRUE
 
 USER builder
 WORKDIR /home/builder
+RUN \
+  git clone \
+    --branch 1-alpha-20240109-1 \
+    --depth 1 \
+    https://github.com/linuxdeploy/linuxdeploy-plugin-qt \
+    --recurse-submodules && \
+  cd linuxdeploy-plugin-qt && \
+  cmake . \
+    -G Ninja \
+    -DBUILD_GMOCK=OFF \
+    -DBUILD_TESTING=OFF \
+    -DINSTALL_GTEST=OFF \
+    -DCMAKE_INSTALL_PREFIX=$HOME/.local && \
+  ninja && ninja install && \
+  cd .. && rm -rf linuxdeploy-plugin-qt
 
-CMD ["/bin/bash","-l"]
+ENV DOCKER_BUILD=TRUE
+
+USER root
+WORKDIR /
+ADD entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
