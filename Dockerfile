@@ -54,6 +54,8 @@ RUN \
     https://github.com/linuxdeploy/linuxdeploy-plugin-qt \
     --recurse-submodules && \
   cd linuxdeploy-plugin-qt && \
+  # On arm/v7, wget fails if --no-check-certificate isn't used
+  sed -i 's/wget --quiet \"$url\" -O -/curl -o - \"$url\"/g' lib/linuxdeploy/src/core/generate-excludelist.sh && \
   cmake . \
     -G Ninja \
     -DBUILD_GMOCK=OFF \
