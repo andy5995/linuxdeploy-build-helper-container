@@ -7,11 +7,12 @@ on:
   push:
     branches: trunk
     paths:
+    - 'entrypoint.sh'
     - 'Dockerfile'
     - '**workflows/docker.yml'
   workflow_dispatch:
   schedule:
-    - cron: '30 11 18 * *'
+    - cron: '30 11 20 * *'
 
 env:
   REGISTRY_IMAGE: andy5995/linuxdeploy

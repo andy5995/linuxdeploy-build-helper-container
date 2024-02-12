@@ -1,5 +1,10 @@
 #!/bin/bash
 
+echo ""
+echo "linuxdeploy Build Helper Container v2.0.0"
+echo "https://github.com/andy5995/linuxdeploy-build-helper-container"
+echo ""
+
 OLDPWD=$PWD
 
 if [ -z "HOSTUID" ]; then
