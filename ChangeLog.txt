@@ -1,3 +1,8 @@
+2024-02-12
+
+  * Convert Action to a container
+  * Release v2.0.0
+
 2024-02-08
 
   * Release v1.1.1
