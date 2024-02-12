@@ -32,9 +32,8 @@ RUN \
 
 WORKDIR /home/builder/.local/bin
 RUN \
-  curl -LO https://github.com/linuxdeploy/linuxdeploy-plugin-gtk/raw/97290a3e374381e9fa7983ba098729a37076f3ed/linuxdeploy-plugin-gtk.sh && \
+  curl -LO https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/3b67a1d1c1b0c8268f57f2bce40fe2d33d409cea/linuxdeploy-plugin-gtk.sh && \
   chmod +x linuxdeploy-plugin-gtk.sh
-
 
 USER root
 ARG DEBIAN_FRONTEND=noninteractive
