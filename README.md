@@ -44,8 +44,25 @@ If you would like to look around the container, you can use
 
 ## Locally
 
-If you want to clean your project build directory, add `-e CLEAN_BUILD=true`
-to the `docker run` arguments.
+If you want to clean your project build directory, you can add `-e
+CLEAN_BUILD=true` to the `docker run` arguments, and use something like this
+in your script:
+
+```sh
+# Clean build directory if specified and it exists
+if [ "$CLEAN_BUILD" = "true" ] && [ -d "$BUILD_DIR" ]; then
+  rm -rf "$BUILD_DIR"
+fi
+
+# Setup project for building, run ./configure, ./autogen.sh, cmake, etc
+if [ ! -d "$BUILD_DIR" ]; then
+  meson setup "$BUILD_DIR" \
+    -Dbuildtype=release \
+    -Dstrip=true \
+    -Db_sanitize=none \
+    -Dprefix=/usr
+fi
+```
 
 To build for other architectures, you may need to use qemu with docker. There
 may be other ways, but you can check out [this
