@@ -36,7 +36,6 @@ RUN \
   chmod +x linuxdeploy-plugin-gtk.sh
 
 USER root
-ARG DEBIAN_FRONTEND=noninteractive
 RUN \
   apt update && apt upgrade -y && apt install -y \
     libgtk2.0-dev \
