@@ -1,5 +1,5 @@
 FROM ubuntu:focal
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 RUN \
   apt update && apt upgrade -y && apt install -y \
     autoconf \
