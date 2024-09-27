@@ -20,7 +20,7 @@ env:
 jobs:
   build-dependencies-image:
     runs-on: ubuntu-latest
-    name: ${{ matrix.platform }}-dep-image
+    name: ${{ matrix.codename }}-${{ matrix.platform }}-dep-image
     strategy:
       matrix:
         platform:
@@ -140,7 +140,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - merge-dependencies-image
-    name: ${{ matrix.platform }}-image
+    name: ${{ matrix.codename }}-${{ matrix.platform }}-image
     strategy:
       matrix:
         platform:
