@@ -1,4 +1,5 @@
-FROM ubuntu:focal
+ARG CODENAME=focal
+FROM ubuntu:$CODENAME
 ARG DEBIAN_FRONTEND=noninteractive
 RUN \
   apt update && apt upgrade -y && apt install -y \

@@ -1,4 +1,5 @@
-FROM andy5995/linuxdeploy:dependencies-latest
+ARG CODENAME=focal
+FROM andy5995/linuxdeploy:dependencies-$CODENAME-latest
 USER builder
 WORKDIR /home/builder
 
