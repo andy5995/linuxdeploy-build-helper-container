@@ -20,7 +20,7 @@ using [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy).
     -e VERSION=test \
     -v $PWD:/workspace \
     -w /workspace \
-    andy5995/linuxdeploy:latest packaging/appimage/pre-appimage.sh
+    andy5995/linuxdeploy:v2 packaging/appimage/pre-appimage.sh
 
 This is meant to be run from the source root of your project. Using the
 command above, your current directory will be mounted in the container at
@@ -40,7 +40,7 @@ You may use `sudo` in your script to install packages or do other things.
 
 If you would like to look around the container, you can use
 
-    docker run -it --rm --entrypoint sh andy5995/linuxdeploy:latest
+    docker run -it --rm --entrypoint sh andy5995/linuxdeploy:v2
 
 ## Locally
 
