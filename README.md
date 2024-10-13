@@ -4,6 +4,11 @@ A docker container that aims to help build an
 [AppImage](https://github.com/AppImage/AppImageKit) on multiple architectures
 using [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy).
 
+Latest version: v2-focal
+
+v2-jammy is also available if for some reason you require a more recent
+version Ubuntu.
+
 ## Available architectures
 
     amd64
@@ -20,7 +25,7 @@ using [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy).
     -e VERSION=test \
     -v $PWD:/workspace \
     -w /workspace \
-    andy5995/linuxdeploy:v2 packaging/appimage/pre-appimage.sh
+    andy5995/linuxdeploy:v2-focal packaging/appimage/pre-appimage.sh
 
 This is meant to be run from the source root of your project. Using the
 command above, your current directory will be mounted in the container at
@@ -40,7 +45,7 @@ You may use `sudo` in your script to install packages or do other things.
 
 If you would like to look around the container, you can use
 
-    docker run -it --rm --entrypoint sh andy5995/linuxdeploy:v2
+    docker run -it --rm --entrypoint sh andy5995/linuxdeploy:v2-focal
 
 ## Locally
 
@@ -89,7 +94,7 @@ details on why I chose that version of Ubuntu.
 
 Some 'GITHUB_...' variables will not work inside the container.
 
-Recent version of cmake, meson, and ninja are installed to
+Recent versions of cmake, meson, and ninja are installed to
 '/home/builder/.local/bin' which is the first path in PATH (installing them
 with `apt` will probably offer no benefit).
 

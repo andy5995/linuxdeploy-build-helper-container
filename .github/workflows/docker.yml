@@ -241,7 +241,6 @@ jobs:
         with:
           images: ${{ env.REGISTRY_IMAGE }}
           tags: |
-            type=raw,value=${{ env.VERSION }},enable=${{ matrix.codename == 'focal' }}
             type=raw,value=${{ env.VERSION }}-${{ matrix.codename }}
       -
         name: Login to Docker Hub
