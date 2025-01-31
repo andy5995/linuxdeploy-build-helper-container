@@ -31,7 +31,8 @@ RUN \
     python3-pip \
     sudo \
     wget \
-    xxd && \
+    xxd \
+    zsync && \
   update-ca-certificates -f && \
   rm -rf /var/lib/apt/lists
 
