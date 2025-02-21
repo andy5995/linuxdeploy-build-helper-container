@@ -70,7 +70,7 @@ RUN \
 WORKDIR /home/builder
 
 RUN \
-  git clone --depth 1 --branch 2.0.0-alpha-1-20241106 https://github.com/linuxdeploy/linuxdeploy --recurse-submodules && \
+  git clone --depth 1 --branch 1-alpha-20250213-2 https://github.com/linuxdeploy/linuxdeploy --recurse-submodules && \
     cd linuxdeploy && cp src/core/copyright/copyright.h src/core && \
     cmake . \
       -G Ninja \
@@ -82,7 +82,7 @@ RUN \
     ninja && ninja install linuxdeploy && cd .. && \
     rm -rf linuxdeploy
 RUN \
-  git clone --depth 1 --branch 1-alpha-20230713-1 https://github.com/linuxdeploy/linuxdeploy-plugin-appimage --recurse-submodules && \
+  git clone --depth 1 --branch 1-alpha-20250213-1 https://github.com/linuxdeploy/linuxdeploy-plugin-appimage --recurse-submodules && \
     cd linuxdeploy-plugin-appimage && \
     cmake . \
       -G Ninja \
@@ -131,7 +131,7 @@ USER builder
 WORKDIR /home/builder
 RUN \
   git clone \
-    --branch 2.0.0-alpha-1-20241106 \
+    --branch 1-alpha-20250213-1 \
     --depth 1 \
     https://github.com/linuxdeploy/linuxdeploy-plugin-qt \
     --recurse-submodules && \
