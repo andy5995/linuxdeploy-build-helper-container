@@ -77,13 +77,18 @@ jobs:
             type=image,name=${{ env.GHCR_REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
           cache-from: type=registry,ref=${{ env.DH_REGISTRY_IMAGE }}:${{ matrix.codename }}-${{ env.PLATFORM_PAIR }}-${{ env.VERSION }}-buildcache
           cache-to: type=registry,ref=${{ env.DH_REGISTRY_IMAGE }}:${{ matrix.codename }}-${{ env.PLATFORM_PAIR }}-${{ env.VERSION }}-buildcache,mode=max
+          provenance: false
+          annotations: true
 
 
-      - name: Export digest
+      - name: Export digests
         run: |
           mkdir -p /tmp/digests
-          digest="${{ steps.build.outputs.digest }}"
-          touch "/tmp/digests/${digest#sha256:}"
+          echo "${{ steps.build.outputs.metadata }}" > /tmp/metadata.json
+          jq -r '.[] | select(.digest) | .digest' /tmp/metadata.json | while read -r digest; do
+            touch "/tmp/digests/${digest#sha256:}"
+          done
+
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
