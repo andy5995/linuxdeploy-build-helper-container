@@ -72,21 +72,16 @@ jobs:
           build-args: CODENAME=${{ matrix.codename }}
           file: ./Dockerfile
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: |
-            type=image,name=${{ env.DH_REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
-            type=image,name=${{ env.GHCR_REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,"name=${{ env.DH_REGISTRY_IMAGE }},${{ env.GHCR_REGISTRY_IMAGE }}",push-by-digest=true,name-canonical=true,push=true
           cache-from: type=registry,ref=${{ env.DH_REGISTRY_IMAGE }}:${{ matrix.codename }}-${{ env.PLATFORM_PAIR }}-${{ env.VERSION }}-buildcache
           cache-to: type=registry,ref=${{ env.DH_REGISTRY_IMAGE }}:${{ matrix.codename }}-${{ env.PLATFORM_PAIR }}-${{ env.VERSION }}-buildcache,mode=max
-          provenance: false
 
-      - name: Export digests
+
+      - name: Export digest
         run: |
           mkdir -p /tmp/digests
-          echo "${{ steps.build.outputs.metadata }}" > /tmp/metadata.json
-          jq -r '.[] | select(.digest) | .digest' /tmp/metadata.json | while read -r digest; do
-            touch "/tmp/digests/${digest#sha256:}"
-          done
-
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
