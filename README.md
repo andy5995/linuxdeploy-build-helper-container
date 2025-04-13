@@ -46,7 +46,10 @@ If you would like to look around the container, you can use
 
 > [!NOTE]
 > The image is also available from the GitHub Container Registry:
-> `docker pull ghcr.io/andy5995/linuxdeploy-build-helper-container:v3-jammy`
+>
+> ```
+> docker pull ghcr.io/andy5995/linuxdeploy-build-helper-container:v3-jammy
+> ```
 
 ## Locally
 
