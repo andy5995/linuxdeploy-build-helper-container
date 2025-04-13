@@ -58,7 +58,10 @@ RUN \
   sudo apt install -y kitware-archive-keyring && \
   echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $CODENAME-rc main" | sudo tee -a /etc/apt/sources.list.d/kitware.list >/dev/null && \
   sudo apt update && \
-  sudo apt install -y cmake && \
+  # The linuxdeploy cmake requires 3.2, but compatibility with CMake < 3.5 has been
+  # removed from CMake as of 4.0.0
+  sudo apt install -y cmake=3.31.6-0kitware1ubuntu22.04.1 cmake-data=3.31.6-0kitware1ubuntu22.04.1 && \
+  sudo apt-mark hold cmake cmake-data && \
   sudo rm -rf /var/lib/apt/lists
 
 # So pip will not report about the path...
