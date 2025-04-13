@@ -78,8 +78,6 @@ jobs:
           cache-from: type=registry,ref=${{ env.DH_REGISTRY_IMAGE }}:${{ matrix.codename }}-${{ env.PLATFORM_PAIR }}-${{ env.VERSION }}-buildcache
           cache-to: type=registry,ref=${{ env.DH_REGISTRY_IMAGE }}:${{ matrix.codename }}-${{ env.PLATFORM_PAIR }}-${{ env.VERSION }}-buildcache,mode=max
           provenance: false
-          annotations: true
-
 
       - name: Export digests
         run: |
