@@ -27,7 +27,7 @@ jobs:
   test-rmw:
     runs-on: ubuntu-latest
     env:
-      REGISTRY_IMAGE: andy5995/linuxdeploy:v3-focal
+      REGISTRY_IMAGE: andy5995/linuxdeploy:v3-jammy
       DOCKER_CACHE_DEST: ${{ github.workspace }}/.docker/buildx-cache-${{ matrix.platform }}
     strategy:
       matrix:
@@ -103,7 +103,7 @@ jobs:
             . \
             -t $REGISTRY_IMAGE \
             --platform=${{ matrix.platform }} \
-            --build-arg CODENAME=focal \
+            --build-arg CODENAME=jammy \
             --cache-to=type=local,dest=${{ env.DOCKER_CACHE_DEST }} \
             --cache-from=type=local,src=${{ env.DOCKER_CACHE_DEST }} \
             --load

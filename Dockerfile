@@ -1,6 +1,6 @@
-ARG CODENAME=focal
+ARG CODENAME=jammy
 FROM ubuntu:$CODENAME
-ARG CODENAME=focal
+ARG CODENAME=jammy
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN \
@@ -118,19 +118,11 @@ USER root
 ARG DEBIAN_FRONTEND=noninteractive
 RUN \
   apt update && \
-  if [ "$CODENAME" = "focal" ];then \
-    apt install --no-install-recommends -y \
-      libgtk2.0-dev \
-      libgtk-3-dev \
-      nlohmann-json3-dev \
-      qt5-default;  \
-  else \
-    apt install --no-install-recommends -y \
-      libgtk2.0-dev \
-      libgtk-3-dev \
-      nlohmann-json3-dev \
-      qtbase5-dev; \
-  fi && \
+  apt install --no-install-recommends -y \
+    libgtk2.0-dev \
+    libgtk-3-dev \
+    nlohmann-json3-dev \
+    qtbase5-dev && \
   rm -rf /var/lib/apt/lists
 
 USER builder

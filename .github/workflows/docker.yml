@@ -29,7 +29,6 @@ jobs:
           - ubuntu-24.04-arm
           - ubuntu-24.04
         codename:
-          - focal
           - jammy
 
       fail-fast: true
@@ -97,7 +96,6 @@ jobs:
     strategy:
       matrix:
         codename:
-          - focal
           - jammy
       fail-fast: true
 

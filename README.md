@@ -4,10 +4,7 @@ A docker container that aims to help build an
 [AppImage](https://github.com/AppImage/AppImageKit) on multiple architectures
 using [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy).
 
-Latest version: v3-focal
-
-v3-jammy is also available if for some reason you require a more recent
-version Ubuntu.
+Latest version: v3-jammy
 
 ## Available architectures
 
@@ -45,7 +42,11 @@ You may use `sudo` in your script to install packages or do other things.
 
 If you would like to look around the container, you can use
 
-    docker run -it --rm --entrypoint bash andy5995/linuxdeploy:v3-focal
+    docker run -it --rm --entrypoint bash andy5995/linuxdeploy:v3-jammy
+
+> [!NOTE]
+> The image is also available from the GitHub Container Registry:
+> `docker pull ghcr.io/andy5995/linuxdeploy-build-helper-container:v3-jammy`
 
 ## Locally
 
@@ -83,7 +84,7 @@ These plugins are installed in the container:
 
 ## Note
 
-The container runs Ubuntu 20.04 (Focal Fossil). See [this
+The container runs Ubuntu 22.04 (Jammy Jellyfish). See [this
 discussion](https://github.com/orgs/AppImage/discussions/1254) for more
 details on why I chose that version of Ubuntu.
 

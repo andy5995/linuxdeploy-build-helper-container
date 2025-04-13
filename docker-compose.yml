@@ -4,7 +4,7 @@ services:
       HOSTUID: ${HOSTUID}
       HOSTGID: ${HOSTGID}
       VERSION: ${VERSION}
-    image: andy5995/linuxdeploy:v3-focal
+    image: ${REGISTRY_IMAGE}:${TAG}
     platform: ${PLATFORM:-linux/amd64}
     volumes:
       - $PWD:$WORKSPACE
