@@ -5,7 +5,7 @@ services:
       HOSTGID: ${HOSTGID}
       VERSION: ${VERSION}
     image: ${REGISTRY_IMAGE}:${TAG}
-    platform: ${PLATFORM:-linux/amd64}
+    platform: ${PLATFORM}
     volumes:
       - $PWD:$WORKSPACE
     working_dir: $WORKSPACE
