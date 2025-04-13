@@ -27,7 +27,8 @@ jobs:
   test-rmw:
     runs-on: ubuntu-latest
     env:
-      REGISTRY_IMAGE: andy5995/linuxdeploy:v3-jammy
+      REGISTRY_IMAGE: andy5995/linuxdeploy
+      TAG: v3-jammy
       DOCKER_CACHE_DEST: ${{ github.workspace }}/.docker/buildx-cache-${{ matrix.platform }}
     strategy:
       matrix:
@@ -101,7 +102,7 @@ jobs:
           cd _linuxdeploy_test
           docker buildx build \
             . \
-            -t $REGISTRY_IMAGE \
+            -t ${REGISTRY_IMAGE}:${TAG} \
             --platform=${{ matrix.platform }} \
             --build-arg CODENAME=jammy \
             --cache-to=type=local,dest=${{ env.DOCKER_CACHE_DEST }} \
