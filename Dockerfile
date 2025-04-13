@@ -60,7 +60,10 @@ RUN \
   sudo apt update && \
   # The linuxdeploy cmake requires 3.2, but compatibility with CMake < 3.5 has been
   # removed from CMake as of 4.0.0
-  sudo apt install -y cmake=3.31.6-0kitware1ubuntu22.04.1 cmake-data=3.31.6-0kitware1ubuntu22.04.1 && \
+  UBUNTU_VERSION=$(grep '^VERSION_ID=' /etc/os-release | cut -d'"' -f2) && \
+  VERSION="3.31.6-0kitware1ubuntu${UBUNTU_VERSION}.1" && \
+  sudo apt-get update && \
+  sudo apt-get install -y cmake=${VERSION} cmake-data=${VERSION} && \
   sudo apt-mark hold cmake cmake-data && \
   sudo rm -rf /var/lib/apt/lists
 
