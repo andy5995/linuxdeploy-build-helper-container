@@ -25,24 +25,21 @@ env:
 
 jobs:
   test-rmw:
-    runs-on: ubuntu-latest
     env:
       REGISTRY_IMAGE: andy5995/linuxdeploy
       TAG: v3-jammy
-      DOCKER_CACHE_DEST: ${{ github.workspace }}/.docker/buildx-cache-${{ matrix.platform }}
+      DOCKER_CACHE_DEST: ${{ github.workspace }}/.docker/buildx-cache-${{ matrix.os }}
     strategy:
       matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
+        os:
+          - ubuntu-24.04-arm
+          - ubuntu-24.04
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout rmw
         uses: actions/checkout@v4
         with:
           repository: theimpossibleastronaut/rmw
-
-      - if: ${{ ! contains(matrix.platform, 'amd64') }}
-        uses: docker/setup-qemu-action@v3
 
       - name: Set variables
         run: |
@@ -87,9 +84,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.DOCKER_CACHE_DEST }}
-          key: ${{ runner.os }}-docker-${{ matrix.platform }}-${{ github.ref_name }}
+          key: ${{ runner.os }}-docker-${{ matrix.os }}-${{ github.ref_name }}
           restore-keys: |
-            ${{ runner.os }}-docker-${{ matrix.platform }}-
+            ${{ runner.os }}-docker-${{ matrix.os }}-
             ${{ runner.os }}-docker-
 
       - name: Set up Docker Buildx
@@ -103,7 +100,6 @@ jobs:
           docker buildx build \
             . \
             -t ${REGISTRY_IMAGE}:${TAG} \
-            --platform=${{ matrix.platform }} \
             --build-arg CODENAME=jammy \
             --cache-to=type=local,dest=${{ env.DOCKER_CACHE_DEST }} \
             --cache-from=type=local,src=${{ env.DOCKER_CACHE_DEST }} \
@@ -115,13 +111,12 @@ jobs:
           docker compose -f _linuxdeploy_test/docker-compose.yml run --rm build
         env:
           SCRIPT: 'packaging/appimage/pre-appimage.sh'
-          PLATFORM: ${{ matrix.platform }}
 
       - name: Create sha256sum
         run: |
-          IMAGE_FILENAME=$(basename `find out/*AppImage`)
-          echo "IMAGE_FILENAME=$IMAGE_FILENAME" >> $GITHUB_ENV
           cd out
+          IMAGE_FILENAME=$(ls *.AppImage)
+          echo "IMAGE_FILENAME=$IMAGE_FILENAME" >> $GITHUB_ENV
           sha256sum "$IMAGE_FILENAME" > "$IMAGE_FILENAME.sha256sum"
 
       - name: Upload AppImage
