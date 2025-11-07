@@ -76,7 +76,7 @@ RUN \
 WORKDIR /home/builder
 
 RUN \
-  git clone --depth 1 --branch 1-alpha-20250213-2 https://github.com/linuxdeploy/linuxdeploy --recurse-submodules && \
+  git clone --depth 1 --branch 1-alpha-20251107-1 https://github.com/linuxdeploy/linuxdeploy --recurse-submodules && \
     cd linuxdeploy && cp src/core/copyright/copyright.h src/core && \
     cmake . \
       -G Ninja \
