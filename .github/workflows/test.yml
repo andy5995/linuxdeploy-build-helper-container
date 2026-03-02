@@ -120,7 +120,7 @@ jobs:
           sha256sum "$IMAGE_FILENAME" > "$IMAGE_FILENAME.sha256sum"
 
       - name: Upload AppImage
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.IMAGE_FILENAME }}
           path: ./out/*
