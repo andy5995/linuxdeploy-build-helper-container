@@ -14,12 +14,7 @@ Latest version: v3-jammy
 ## Usage
 
 Make a `docker` sub-directory within your project and copy `.env` and
-`docker-compose.yml` to it. Add custom variables to suit your needs. Add your
-numeric user and group id to the corresponding variables in `.env`. You can
-find them by using:
-
-    id -u
-    id -g
+`docker-compose.yml` to it. Add custom variables to suit your needs.
 
 To build the AppImage:
 
@@ -34,9 +29,17 @@ You can see an example of an AppImage build script at
 Add the `/path/to/script` in your custom `.env` file.
 
 When the container starts, 'root' changes the UID of user 'builder' (a user
-created during the build of the Dockerfile) to HOSTUID. This allows builder to
-build your project and create the AppImage without root privileges (the
-resulting files will be owned by you).
+created during the build of the Dockerfile) to match the host user's. This
+allows builder to build your project and create the AppImage without root
+privileges (the resulting files will be owned by you).
+
+By default the host UID/GID are auto-detected from the owner of the
+bind-mounted workspace (Docker preserves host ownership across bind mounts).
+You can still pass `HOSTUID` and `HOSTGID` explicitly to override — useful in
+CI matrices, or when the workspace ownership doesn't match the invoking
+user — by exporting them before running `docker-compose`:
+
+    export HOSTUID=$(id -u) HOSTGID=$(id -g)
 
 You may use `sudo` in your script to install packages or do other things.
 
