@@ -15,6 +15,8 @@ RUN \
     gettext \
     gpg \
     git \
+    gnupg \
+    imagemagick \
     libcairo-dev \
     libcurl4-gnutls-dev \
     libfuse2 \
@@ -29,6 +31,7 @@ RUN \
     libzstd-dev \
     patchelf \
     python3-pip \
+    software-properties-common \
     sudo \
     wget \
     xxd \
