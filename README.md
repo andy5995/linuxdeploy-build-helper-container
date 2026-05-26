@@ -33,11 +33,14 @@ created during the build of the Dockerfile) to match the host user's. This
 allows builder to build your project and create the AppImage without root
 privileges (the resulting files will be owned by you).
 
-By default the host UID/GID are auto-detected from the owner of the
-bind-mounted workspace (Docker preserves host ownership across bind mounts).
-You can still pass `HOSTUID` and `HOSTGID` explicitly to override — useful in
-CI matrices, or when the workspace ownership doesn't match the invoking
-user — by exporting them before running `docker-compose`:
+The host UID/GID are auto-detected from the owner of the bind-mounted
+workspace (Docker preserves host ownership across bind mounts), so the
+typical invocation above needs no extra environment.
+
+You can still pass `HOSTUID` and `HOSTGID` explicitly to override the
+auto-detection — useful when the workspace ownership doesn't match the
+invoking user, or in some CI matrices — by exporting them before running
+`docker-compose`:
 
     export HOSTUID=$(id -u) HOSTGID=$(id -g)
 

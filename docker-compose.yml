@@ -1,6 +1,8 @@
 services:
   build:
     environment:
+      # HOSTUID/HOSTGID are auto-detected from the workspace owner; export
+      # them only to override (see README). Unset = auto-detect.
       HOSTUID: ${HOSTUID}
       HOSTGID: ${HOSTGID}
       VERSION: ${VERSION}

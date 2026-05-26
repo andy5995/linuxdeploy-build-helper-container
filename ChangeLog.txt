@@ -1,3 +1,13 @@
+(in-progress):
+
+  * entrypoint: auto-detect HOSTUID/HOSTGID from the workspace owner;
+    explicit pass is now an optional override (previously required).
+  * Dockerfile: pre-install gnupg, software-properties-common, imagemagick.
+
+2026-05-22
+
+  * Release v3.0.0
+
 2024-11-26
 
   * Migrate appimagetool (replace AppImageKit with type2runtime)
