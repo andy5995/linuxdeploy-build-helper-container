@@ -91,6 +91,15 @@ These plugins are installed in the container:
 * [linuxdeploy-plugin-gtk](https://github.com/linuxdeploy/linuxdeploy-plugin-gtk)
 * [linuxdeploy-plugin-qt](https://github.com/linuxdeploy/linuxdeploy-plugin-qt)
 
+## Pinned toolchain
+
+`appimagetool` is pinned to release `1.9.1`, and the AppImage type2 runtime is
+pinned to release `20251108` — bundled into the image and verified by SHA-256.
+The bundled runtime is injected into `appimagetool` by default, so AppImage
+builds do not fetch the rolling `continuous` runtime at build time. To use a
+different runtime, pass `appimagetool --runtime-file <path>` (or set
+`LDAI_RUNTIME_FILE` when building through the linuxdeploy appimage plugin).
+
 ## Note
 
 The container runs Ubuntu 22.04 (Jammy Jellyfish). See [this

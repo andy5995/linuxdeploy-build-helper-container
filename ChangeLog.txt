@@ -1,5 +1,10 @@
 (in-progress):
 
+  * Pin appimagetool to release 1.9.1 (was the rolling 'continuous' branch).
+  * Bundle a pinned, checksum-verified AppImage type2 runtime (20251108) and
+    inject it into appimagetool by default, so AppImage builds no longer
+    download the rolling 'continuous' runtime at build time. Override with an
+    explicit --runtime-file (or LDAI_RUNTIME_FILE via the linuxdeploy plugin).
   * entrypoint: auto-detect HOSTUID/HOSTGID from the workspace owner;
     explicit pass is now an optional override (previously required).
   * Dockerfile: pre-install gnupg, software-properties-common, imagemagick.

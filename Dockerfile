@@ -102,7 +102,7 @@ RUN \
 
 ARG CODENAME
 RUN \
-  git clone --depth 1 --branch continuous https://github.com/AppImage/appimagetool.git && \
+  git clone --depth 1 --branch 1.9.1 https://github.com/AppImage/appimagetool.git && \
   cd appimagetool && \
   cmake . \
     -DCMAKE_INSTALL_PREFIX=$HOME/.local \
@@ -111,6 +111,37 @@ RUN \
   sed -i 's@wget https://github.com/plougher/squashfs-tools/archive/refs/tags/"$version".tar.gz -qO - | tar xvz --strip-components=1@curl -sL https://github.com/plougher/squashfs-tools/archive/refs/tags/"$version".tar.gz | tar xvz --strip-components=1@' ci/install-static-mksquashfs.sh && \
   sudo bash -euxo pipefail ci/install-static-mksquashfs.sh 4.6.1 && \
   cd .. && rm -rf appimagetool
+
+# Pin the AppImage type2 runtime. appimagetool hardcodes the rolling
+# 'continuous' tag and only --runtime-file overrides it, so bundle a pinned,
+# checksum-verified runtime for this image's arch. Bump TYPE2_RUNTIME_TAG and
+# the SHAs together. TARGETARCH is provided automatically by BuildKit.
+ARG TARGETARCH
+ARG TYPE2_RUNTIME_TAG=20251108
+RUN \
+  case "$TARGETARCH" in \
+    amd64) rt=runtime-x86_64;  sha=2fca8b443c92510f1483a883f60061ad09b46b978b2631c807cd873a47ec260d ;; \
+    arm64) rt=runtime-aarch64; sha=00cbdfcf917cc6c0ff6d3347d59e0ca1f7f45a6df1a428a0d6d8a78664d87444 ;; \
+    *) echo "Unsupported TARGETARCH=$TARGETARCH" >&2; exit 1 ;; \
+  esac && \
+  mkdir -p /home/builder/.local/share/appimage-runtime && \
+  curl -fL "https://github.com/AppImage/type2-runtime/releases/download/${TYPE2_RUNTIME_TAG}/${rt}" \
+    -o /home/builder/.local/share/appimage-runtime/runtime && \
+  echo "${sha}  /home/builder/.local/share/appimage-runtime/runtime" | sha256sum -c -
+
+# Wrap appimagetool so the bundled runtime is the default (covers both the
+# linuxdeploy appimage plugin, which calls appimagetool from PATH, and direct
+# appimagetool use), while still honouring an explicit --runtime-file.
+RUN \
+  mv /home/builder/.local/bin/appimagetool /home/builder/.local/bin/appimagetool.real && \
+  printf '%s\n' \
+    '#!/bin/sh' \
+    'for a in "$@"; do' \
+    '  case "$a" in --runtime-file|--runtime-file=*) exec /home/builder/.local/bin/appimagetool.real "$@" ;; esac' \
+    'done' \
+    'exec /home/builder/.local/bin/appimagetool.real --runtime-file /home/builder/.local/share/appimage-runtime/runtime "$@"' \
+    > /home/builder/.local/bin/appimagetool && \
+  chmod +x /home/builder/.local/bin/appimagetool
 
 WORKDIR /home/builder/.local/bin
 RUN \

@@ -3,7 +3,7 @@
 set -e
 
 echo ""
-echo "linuxdeploy Build Helper Container v3.1.0"
+echo "linuxdeploy Build Helper Container v3.2.0"
 echo "https://github.com/andy5995/linuxdeploy-build-helper-container"
 echo ""
 
