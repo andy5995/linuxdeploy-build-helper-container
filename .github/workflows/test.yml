@@ -37,7 +37,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout rmw
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: theimpossibleastronaut/rmw
 
@@ -48,7 +48,7 @@ jobs:
           fi
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: _linuxdeploy_test
           fetch-depth: 0
